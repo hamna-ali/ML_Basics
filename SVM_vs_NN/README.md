@@ -1,115 +1,94 @@
-Activity Recognition using SVM and CNN
-This project performs human activity recognition using motion sensor data (Accelerometer and Gyroscope) through two approaches:
+# Activity Recognition using SVM and CNN
 
-Support Vector Machine (SVM) using engineered statistical features
+This project performs binary classification of human activities (e.g., *Open Door* vs. *Rub Hands*) using motion sensor data collected from Accelerometer and Gyroscope. Two classification approaches are implemented:
 
-1D Convolutional Neural Network (CNN) trained on raw time-series data
+1. **Support Vector Machine (SVM)** with statistical feature extraction
+2. **1D Convolutional Neural Network (CNN)** using raw time-series data in PyTorch
 
-Project Overview
-The goal is to classify two human activities (e.g., Open Door vs. Rub Hands) using sensor data.
-The data is provided in .npy format and includes both training and testing sets for:
+---
 
-Multi-sensor Accelerometer readings
+## 📂 Dataset
 
-Multi-sensor Gyroscope readings
+Preprocessed `.npy` files are used as input:
 
-Corresponding activity labels
+- **train_MSAccelerometer_OpenDoor_RubHands.npy**
+- **train_MSGyroscope_OpenDoor_RubHands.npy**
+- **train_labels_OpenDoor_RubHands.npy**
+- **test_MSAccelerometer_OpenDoor_RubHands.npy**
+- **test_MSGyroscope_OpenDoor_RubHands.npy**
+- **test_labels_OpenDoor_RubHands.npy**
 
-Dataset
-Format: NumPy arrays (.npy)
+Each input shape: `(samples, time_steps, axes)`
 
-Shape: (samples, time_steps, axes)
+---
 
-Sensors used:
+## 🧮 Feature Engineering (for SVM)
 
-Accelerometer
+For each sensor axis, the following 8 features are extracted:
+- Mean
+- Max
+- Min
+- Standard Deviation
+- Median
+- Range
+- Skewness
+- Kurtosis
 
-Gyroscope
+Total: `2 sensors × 3 axes × 8 features = 48 features/sample`
 
-Feature Extraction (for SVM)
-Each sample generates 8 features per axis per sensor:
+---
 
-Mean
+## ⚙️ Technologies Used
 
-Max
+- Python
+- NumPy, SciPy
+- scikit-learn
+- PyTorch
+- matplotlib, seaborn
 
-Min
+---
 
-Standard deviation
+## ✅ SVM Classifier
 
-Median
+- **Input**: Extracted 48-dimensional feature vectors
+- **Model**: `SVC(kernel='linear')`
+- **Evaluation Metrics**:
+  - Accuracy
+  - Macro F1-Score
+  - Weighted F1-Score
+  - Confusion Matrix (with labels)
 
-Range
+---
 
-Skewness
+## ✅ CNN Classifier (PyTorch)
 
-Kurtosis
+- **Input**: Raw concatenated sensor data
+- **Architecture**:
+  - 3 Conv1D layers + MaxPool1D
+  - Flatten
+  - 2 Fully Connected layers
+- **Training**:
+  - Loss: CrossEntropyLoss
+  - Optimizer: SGD
+  - Epochs: 150
+  - Batch size: 50
 
-Final shape: 48 features per sample
-= 2 sensors × 3 axes × 8 features
+---
 
-Technologies Used
-Python
+## 📊 Evaluation
 
-NumPy, SciPy
+- Confusion matrix is plotted for both models
+- Classification report includes:
+  - Precision
+  - Recall
+  - F1-Score (per class and average)
 
-scikit-learn
+---
 
-PyTorch
+## 📁 Project Structure
 
-matplotlib, seaborn
-
-Model 1: Support Vector Machine (SVM)
-Kernel: Linear
-
-Input: Engineered statistical features (48-dimensional)
-
-Evaluation Metrics:
-
-Accuracy
-
-Macro F1-score
-
-Weighted F1-score
-
-Confusion Matrix
-
-Model 2: 1D CNN (PyTorch)
-Input: Raw sensor data (Accelerometer + Gyroscope)
-
-Layers:
-
-3 convolutional + max-pooling layers
-
-Fully connected layers
-
-Loss: CrossEntropyLoss
-
-Optimizer: SGD
-
-Trained for: 150 epochs
-
-Batch size: 50
-
-Evaluation Results
-CNN-based classifier achieves high accuracy on test data
-
-Confusion matrices and classification reports are generated for both models
-
-Example metrics:
-
-Test Accuracy: ~XX% (to be filled after running)
-
-F1-score (macro and weighted)
-
-Class-wise performance
-
-Project Structure
-css
-Copy
-Edit
+```
 activity-recognition/
-│
 ├── train_MSAccelerometer_OpenDoor_RubHands.npy
 ├── train_MSGyroscope_OpenDoor_RubHands.npy
 ├── train_labels_OpenDoor_RubHands.npy
@@ -117,16 +96,17 @@ activity-recognition/
 ├── test_MSGyroscope_OpenDoor_RubHands.npy
 ├── test_labels_OpenDoor_RubHands.npy
 └── main.ipynb
-Learning Outcomes
-Preprocessed multi-dimensional sensor data for ML and DL pipelines
+```
 
-Extracted meaningful statistical features from time-series data
+---
 
-Applied SVM for activity classification
+## 📘 Learning Outcomes
 
-Built and trained a 1D CNN using PyTorch
+- Processed motion sensor data from accelerometers and gyroscopes
+- Engineered features for traditional ML classification
+- Built a deep learning pipeline using PyTorch
+- Understood the impact of feature engineering vs deep feature learning
+- Applied evaluation metrics like accuracy and F1-score for imbalanced classes
 
-Evaluated models using accuracy, F1-score, and confusion matrix
 
-Visualized performance with seaborn and matplotlib
 
